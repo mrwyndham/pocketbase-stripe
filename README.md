@@ -116,6 +116,9 @@ This template mirrors completed Stripe transactions to the Pocketbase database. 
 
 This template is based on https://github.com/vercel/nextjs-subscription-payments/tree/main you could take the front end supplied there and adapt it to use PocketBase as a backend. Give it a try and submit a PR to this doc and I will add you as a contributor
 
+## Sponsors
+- [XAM Consulting](https://xam.com.au/)
+
 ## Contributors
 
 - [Samuel Wyndham](https://github.com/mrwyndham)
