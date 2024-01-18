@@ -1,6 +1,6 @@
 # PocketBase + Stripe Subscription Payments Starter
 
-The all-in-one starter kit for high-performance SaaS applications. That don't want a vendor buy in when it comes to backend and frontend. This is a front end agnostic template that you can use 100% with any SaaS application.
+The all-in-one starter kit for high-performance SaaS applications. That don't want a vendor buy in when it comes to backend and frontend. This is a front end agnostic template that you can use 100% with any SaaS application. If there are any issues please feel free to reach out to me on X - [@meinbiz](https://twitter.com/meinbiz)
 
 ## Features
 
@@ -121,7 +121,7 @@ This template is based on https://github.com/vercel/nextjs-subscription-payments
 
 ## Contributors
 
-- [Samuel Wyndham](https://github.com/mrwyndham)
+- [Samuel Wyndham](https://twitter.com/meinbiz)
 - [Suan Choi](https://github.com/suanTech)
 
 ## License
