@@ -63,7 +63,7 @@ Optionally, to speed up the setup, we have added a [fixtures file](fixtures/stri
 1. Download this package
 1. Run `go mod init myapp && go mod tidy` from a command line in the root of the folder
 1. Run `go run main.go serve` from a command line in the root of the folder
-1. Go to a webbrowser and browse to `https://127.0.0.1/_/` and create new admin account and login
+1. Go to a webbrowser and browse to `http://127.0.0.1:8090/_/` and create new admin account and login
 1. Click `Settings` on the left hand side bar and go to `Import Collections`
 1. Click `Load from JSON file` and grab the schema file from `pb_bootstrap/pb_schema.json`
 1. Exit the `go run main.go` command
@@ -117,6 +117,7 @@ This template mirrors completed Stripe transactions to the Pocketbase database. 
 This template is based on https://github.com/vercel/nextjs-subscription-payments/tree/main you could take the front end supplied there and adapt it to use PocketBase as a backend. Give it a try and submit a PR to this doc and I will add you as a contributor
 
 ## Sponsors
+
 - [XAM Consulting](https://xam.com.au/)
 
 ## Contributors
