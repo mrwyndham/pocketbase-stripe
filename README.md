@@ -21,7 +21,7 @@ For the following steps, make sure you have the ["Test Mode" toggle](https://str
 
 #### Create a webhook
 
-We need to create a webhook in the `Developers` section of Stripe. Pictured in the architecture diagram above, this webhook is the piece that connects Stripe to your Vercel Serverless Functions.
+We need to create a webhook in the `Developers` section of Stripe.
 
 1. Click the "Add Endpoint" button on the [test Endpoints page](https://dashboard.stripe.com/test/webhooks).
 1. Enter your production deployment URL followed by `/api/webhooks` for the endpoint URL. (e.g. `https://your-deployment-url.vercel.app/api/webhooks`)
@@ -61,7 +61,6 @@ Optionally, to speed up the setup, we have added a [fixtures file](stripe_bootst
 ### Configure Pocketbase
 
 1. Download this package
-1. Run `go mod init myapp && go mod tidy` from a command line in the root of the folder
 1. Run `go run main.go serve` from a command line in the root of the folder
 1. Go to a webbrowser and browse to `http://127.0.0.1:8090/_/` and create new admin account and login
 1. Click `Settings` on the left hand side bar and go to `Import Collections`
@@ -87,7 +86,7 @@ I know, that was quite a lot to get through, but it's worth it. You're now ready
 Next, start local webhook forwarding:
 
 ```bash
-stripe listen --forward-to=localhost:3000/api/webhooks
+stripe listen --forward-to=127.0.0.1:8090/api/webhooks
 ```
 
 Running this Stripe command will print a webhook secret (such as, `whsec_***`) to the console. Set `STRIPE_WEBHOOK_SECRET` to this value in your `.env.local` file.
