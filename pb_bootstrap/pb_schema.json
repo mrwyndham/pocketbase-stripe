@@ -54,8 +54,7 @@
         "options": {
           "min": null,
           "max": null,
-          "pattern": ""
-        }
+          "pattern": ""        }
       },
       {
         "system": false,
@@ -68,8 +67,7 @@
         "options": {
           "min": null,
           "max": null,
-          "pattern": ""
-        }
+          "pattern": ""        }
       },
       {
         "system": false,
@@ -149,7 +147,9 @@
         "required": false,
         "presentable": false,
         "unique": false,
-        "options": {}
+        "options": {
+          "maxSize": 2000000
+        }
       }
     ],
     "indexes": [
@@ -242,7 +242,9 @@
         "required": false,
         "presentable": false,
         "unique": false,
-        "options": {}
+        "options": {
+          "maxSize": 2000000
+        }
       },
       {
         "system": false,
@@ -337,7 +339,9 @@
         "required": false,
         "presentable": false,
         "unique": false,
-        "options": {}
+        "options": {
+          "maxSize": 2000000
+        }
       },
       {
         "system": false,
@@ -478,18 +482,18 @@
         "presentable": false,
         "unique": false,
         "options": {
-          "maxSelect": 1,
-          "maxSize": 5242880,
           "mimeTypes": [
-            "image/jpg",
-            "image/jpeg",
-            "image/png",
-            "image/svg+xml",
-            "image/gif"
+              "image/jpeg",
+              "image/png",
+              "image/svg+xml",
+              "image/gif",
+              "image/webp"
           ],
           "thumbs": null,
+          "maxSelect": 1,
+          "maxSize": 5242880,
           "protected": false
-        }
+      }
       },
       {
         "system": false,
@@ -580,7 +584,8 @@
       "manageRule": null,
       "minPasswordLength": 8,
       "onlyEmailDomains": null,
+      "onlyVerified": false,
       "requireEmail": false
-    }
+  }
   }
 ]

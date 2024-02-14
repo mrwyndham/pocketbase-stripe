@@ -2,9 +2,12 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
+	"os"
+	"strings"
 	"time"
 
 	"github.com/labstack/echo/v5"
@@ -14,11 +17,11 @@ import (
 	"github.com/pocketbase/pocketbase/forms"
 	"github.com/pocketbase/pocketbase/models"
 
-	"github.com/stripe/stripe-go/v75"
-	"github.com/stripe/stripe-go/v75/billingportal/session"
-	checkoutSession "github.com/stripe/stripe-go/v75/checkout/session"
-	"github.com/stripe/stripe-go/v75/customer"
-	"github.com/stripe/stripe-go/v75/webhook"
+	"github.com/stripe/stripe-go/v76"
+	"github.com/stripe/stripe-go/v76/billingportal/session"
+	checkoutSession "github.com/stripe/stripe-go/v76/checkout/session"
+	"github.com/stripe/stripe-go/v76/customer"
+	"github.com/stripe/stripe-go/v76/webhook"
 )
 
 func coalesce(value *string, defaultValue string) string {
@@ -37,8 +40,16 @@ func int64ToISODate(timestamp int64) string {
 }
 
 func main() {
+	// Retreive stripe generated webhook secret
+	SECRET_TXT, err := os.ReadFile("secret.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	WHSEC := strings.ReplaceAll(string(SECRET_TXT), "\n", "")
+	log.Print(WHSEC)
 	app := pocketbase.New()
-	stripe.Key = "{YOUR_STRIPE_SECRET_KEY_HERE}"
+	// Retreive your STRIPE_SECRET_KEY from environment variables
+	stripe.Key = os.Getenv("STRIPE_SECRET_KEY")
 	app.OnBeforeServe().Add(func(e *core.ServeEvent) error {
 		e.Router.POST("/create-checkout-session", func(c echo.Context) error {
 			// 1. Destructure the price and quantity from the POST body
@@ -299,12 +310,12 @@ func main() {
 			if err != nil {
 				return c.JSON(http.StatusBadRequest, map[string]string{"failure": "failed to parse JSON"})
 			}
-
-			endpointSecret := "{YOUR_WEBHOOK_SECRET_HERE}"
 			signatureHeader := c.Request().Header.Get("Stripe-Signature")
-			event, err = webhook.ConstructEvent(payload, signatureHeader, endpointSecret)
+			event, err = webhook.ConstructEvent(payload, signatureHeader, WHSEC)
 			if err != nil {
-				return c.JSON(http.StatusBadRequest, map[string]string{"failure": "webhook verification failed"})
+				failureMessage := fmt.Sprintf("webhook verification failed: payload=%q, signatureHeader=%q, WHSEC=%q, err=%q",
+					payload, signatureHeader, WHSEC, err)
+				return c.JSON(http.StatusBadRequest, map[string]string{"failure": failureMessage})
 			}
 
 			switch event.Type {

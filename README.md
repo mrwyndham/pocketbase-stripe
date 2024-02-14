@@ -62,7 +62,7 @@ Optionally, to speed up the setup, we have added a [fixtures file](stripe_bootst
 
 1. Download this package
 1. Run `go run main.go serve` from a command line in the root of the folder
-1. Go to a webbrowser and browse to `http://127.0.0.1:8090/_/` and create new admin account and login
+1. Go to a webbrowser and browse to `https://127.0.0.1:8090/_/` and create new admin account and login
 1. Click `Settings` on the left hand side bar and go to `Import Collections`
 1. Click `Load from JSON file` and grab the schema file from `pb_bootstrap/pb_schema.json`
 1. Exit the `go run main.go` command
@@ -70,6 +70,7 @@ Optionally, to speed up the setup, we have added a [fixtures file](stripe_bootst
 1. Search the file for `{YOUR_STRIPE_SECRET_KEY_HERE}` and replace this with your stripe secret which will look like `sk_test....`
 1. Re-run `go run main.go serve`
 1. Configure your authentication settings (this is optional for testing but required for prod)
+1. Finally you will need to host or provide a self-signed cert to use with stripe in dev or you will need to host **WEBHOOKS WILL NOT WORK WITHOUT HOSTING**
 
 ### Connect to Your Front End
 
@@ -90,6 +91,8 @@ stripe listen --forward-to=127.0.0.1:8090/api/webhooks
 ```
 
 Running this Stripe command will print a webhook secret (such as, `whsec_***`) to the console. Set `STRIPE_WEBHOOK_SECRET` to this value in your `.env.local` file.
+
+Please note that stripe wont forward to http. You will need to ensure you are working in an environment where you have an SSL certificate installed
 
 ## Going live
 
