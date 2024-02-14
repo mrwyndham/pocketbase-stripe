@@ -118,6 +118,38 @@ This template mirrors completed Stripe transactions to the Pocketbase database. 
 
 This template is based on https://github.com/vercel/nextjs-subscription-payments/tree/main you could take the front end supplied there and adapt it to use PocketBase as a backend. Give it a try and submit a PR to this doc and I will add you as a contributor
 
+## Note On The Docker Container
+
+I have added a docker container that is not production ready but you can probably get running in google cloud run quite easily or whatever your preference is for hosting. Please note:
+
+- You need to setup a mounted volume for the DB otherwise it will run in memory
+- You need to setup your user collection permissions
+- You need to deploy with run arguements
+
+Here is my current build flow to upgrade and deploy the container to Google Artifact
+
+### Update Packages
+
+`go get -u github.com/pocketbase/pocketbase`
+
+### Build Binary
+
+`GOOS=linux GOARCH=amd64 go build -o bin/app-amd64-linux main.go`
+
+### Build Image
+
+`docker build -t myimage . --build-arg STRIPE_SECRET_KEY=sk_test_WHATEVER_YOUR_KEY_IS --build-arg HOST=api.sign365.com.au --build-arg STRIPE_RETURN_URL=https://sign365.com.au/account --build-arg PORT=8090 --build-arg DEVELOPMENT="" --platform linux/amd64`
+
+### Tag Image
+
+`docker tag myimage australia-southeast1-docker.pkg.dev/biz365-1569752078001/fastpocket/myimage:latest`
+
+### Push Image
+
+`docker push australia-southeast1-docker.pkg.dev/biz365-1569752078001/fastpocket/myimage`
+
+I really hope this helps in building a fresh image.
+
 ## Sponsors
 
 - [XAM Consulting](https://xam.com.au/)
