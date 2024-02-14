@@ -60,14 +60,19 @@ Optionally, to speed up the setup, we have added a [fixtures file](stripe_bootst
 
 ### Configure Pocketbase
 
-1. Download this package
+1. clone this package
+1. set your environment variables to the following
+1. Dog
+   1. STRIPE_SECRET_KEY=sk_test...
+   2. STRIPE_RETURN_URL=url_to_your_site_after_checkout
+   3. HOST=url_to_where_pocketbase_is_hosted
+   4. DEVELOPMENT="" <-- leave blank if deploying live
 1. Run `go run main.go serve` from a command line in the root of the folder
 1. Go to a webbrowser and browse to `https://127.0.0.1:8090/_/` and create new admin account and login
 1. Click `Settings` on the left hand side bar and go to `Import Collections`
 1. Click `Load from JSON file` and grab the schema file from `pb_bootstrap/pb_schema.json`
 1. Exit the `go run main.go` command
-1. Go to main.go in an IDE and search the file for `{YOUR_WEBHOOK_SECRET_HERE}` and replace this with your webhook secret which will look like `whsec_....`
-1. Search the file for `{YOUR_STRIPE_SECRET_KEY_HERE}` and replace this with your stripe secret which will look like `sk_test....`
+1. Run `stripe listen --print-secret --api-key "$STRIPE_SECRET_KEY" > secret.txt` to get your secret key in a `secret.txt` file. Note: this needs to be in the root of your project and is machine specific
 1. Re-run `go run main.go serve`
 1. Configure your authentication settings (this is optional for testing but required for prod)
 1. Finally you will need to host or provide a self-signed cert to use with stripe in dev or you will need to host **WEBHOOKS WILL NOT WORK WITHOUT HOSTING**
@@ -138,7 +143,7 @@ Here is my current build flow to upgrade and deploy the container to Google Arti
 
 ### Build Image
 
-`docker build -t myimage . --build-arg STRIPE_SECRET_KEY=sk_test_WHATEVER_YOUR_KEY_IS --build-arg HOST=api.sign365.com.au --build-arg STRIPE_RETURN_URL=https://sign365.com.au/account --build-arg PORT=8090 --build-arg DEVELOPMENT="" --platform linux/amd64`
+`do build -t myimage . --build-1. arg STRIPE_SECRET_KEY=sk_test_WHATEVER_YOUR_KEY_IS --build-1. arg HOST=api.sign365.com.au --build-1. arg  STRRETURN_URL=https://sign365.com.au/account --build-1. arg PORT=8090 --build-1. arg DEVELOPMENT="" --platform linux/amd64`
 
 ### Tag Image
 

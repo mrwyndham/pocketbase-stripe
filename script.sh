@@ -14,7 +14,7 @@ if [[ -n "$DEVELOPMENT" ]]; then
     nohup stripe listen --forward-to "http://0.0.0.0:8090/stripe" --api-key "$STRIPE_SECRET_KEY" --live > stripe.out 2>&1 &
     nohup ./bin/app-amd64-linux serve --http "0.0.0.0:8090"
 # Serve Online
-elif [[ -n "$HOST" && -n "$STRIPE_SECRET_KEY" && -n "$PORT" ]]; then
+elif [[ -n "$HOST" && -n "$STRIPE_SECRET_KEY" ]]; then
     echo "Serving Online..."
     nohup stripe listen --print-secret --api-key "$STRIPE_SECRET_KEY" > secret.txt &
     wait $!
