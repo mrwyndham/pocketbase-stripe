@@ -72,6 +72,7 @@ Optionally, to speed up the setup, we have added a [fixtures file](stripe_bootst
 1. Click `Load from JSON file` and grab the schema file from `pb_bootstrap/pb_schema.json`
 1. Exit the `go run main.go` command
 1. Run `stripe listen --print-secret --api-key "$STRIPE_SECRET_KEY" > secret.txt` to get your secret key in a `secret.txt` file. Note: this needs to be in the root of your project and is machine specific
+1. Run `nohup stripe listen --forward-to "https://$HOST/stripe" --api-key "$STRIPE_SECRET_KEY" --live > stripe.out 2>&1 &` which will run the forwarding service for stripe in the background
 1. Re-run `go run main.go serve`
 1. Configure your authentication settings (this is optional for testing but required for prod)
 1. Finally you will need to host or provide a self-signed cert to use with stripe in dev or you will need to host **WEBHOOKS WILL NOT WORK WITHOUT HOSTING**
