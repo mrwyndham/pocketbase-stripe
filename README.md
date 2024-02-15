@@ -62,7 +62,6 @@ Optionally, to speed up the setup, we have added a [fixtures file](stripe_bootst
 
 1. clone this package
 1. set your environment variables to the following
-1. Dog
    1. STRIPE_SECRET_KEY=sk_test...
    2. STRIPE_RETURN_URL=url_to_your_site_after_checkout
    3. HOST=url_to_where_pocketbase_is_hosted
