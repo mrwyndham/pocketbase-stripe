@@ -1,4 +1,4 @@
-# FastPocket - React + PocketBase Boiler Plate
+# Pocketbase + Stripe - Extended PocketBase Using Stripe Webhooks
 
 The all-in-one starter kit for high-performance SaaS applications. That don't want a vendor buy in when it comes to backend and frontend. This is a front end agnostic template that you can use 100% with any SaaS application. If there are any issues please feel free to reach out to me on X - [@meinbiz](https://twitter.com/meinbiz)
 
