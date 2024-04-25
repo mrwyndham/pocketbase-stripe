@@ -1,4 +1,4 @@
-# PocketBase + Stripe Subscription Payments Starter
+# FastPocket - React + PocketBase Boiler Plate
 
 The all-in-one starter kit for high-performance SaaS applications. That don't want a vendor buy in when it comes to backend and frontend. This is a front end agnostic template that you can use 100% with any SaaS application. If there are any issues please feel free to reach out to me on X - [@meinbiz](https://twitter.com/meinbiz)
 
@@ -63,16 +63,17 @@ Optionally, to speed up the setup, we have added a [fixtures file](stripe_bootst
 1. clone this package
 1. set your environment variables to the following
    1. STRIPE_SECRET_KEY=sk_test...
-   2. STRIPE_RETURN_URL=url_to_your_site_after_checkout
-   3. HOST=url_to_where_pocketbase_is_hosted
-   4. DEVELOPMENT="" <-- leave blank if deploying live
+   1. STRIPE*SECRET_WHSEC=WHSEC*...
+   1. STRIPE_CANCEL_URL=url_to_your_site_after_checkout_cancel
+   1. STRIPE_SUCCESS_URL=url_to_your_site_after_checkout_success
+   1. HOST=url_to_where_pocketbase_is_hosted
+   1. DEVELOPMENT="" <-- leave blank if deploying live
 1. Run `go run main.go serve` from a command line in the root of the folder
 1. Go to a webbrowser and browse to `https://127.0.0.1:8090/_/` and create new admin account and login
 1. Click `Settings` on the left hand side bar and go to `Import Collections`
 1. Click `Load from JSON file` and grab the schema file from `pb_bootstrap/pb_schema.json`
 1. Exit the `go run main.go` command
 1. Run `stripe listen --print-secret --api-key "$STRIPE_SECRET_KEY" > secret.txt` to get your secret key in a `secret.txt` file. Note: this needs to be in the root of your project and is machine specific
-1. Run `nohup stripe listen --forward-to "https://$HOST/stripe" --api-key "$STRIPE_SECRET_KEY" --live > stripe.out 2>&1 &` which will run the forwarding service for stripe in the background
 1. Re-run `go run main.go serve`
 1. Configure your authentication settings (this is optional for testing but required for prod)
 1. Finally you will need to host or provide a self-signed cert to use with stripe in dev or you will need to host **WEBHOOKS WILL NOT WORK WITHOUT HOSTING**
@@ -168,7 +169,7 @@ I really hope this helps in building a fresh image.
 
 MIT License
 
-Copyright (c) 2024 Sign365
+Copyright (c) 2024 BIZ365 PTY LTD
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

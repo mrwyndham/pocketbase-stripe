@@ -54,7 +54,8 @@
         "options": {
           "min": null,
           "max": null,
-          "pattern": ""        }
+          "pattern": ""
+        }
       },
       {
         "system": false,
@@ -67,7 +68,8 @@
         "options": {
           "min": null,
           "max": null,
-          "pattern": ""        }
+          "pattern": ""
+        }
       },
       {
         "system": false,
@@ -148,15 +150,15 @@
         "presentable": false,
         "unique": false,
         "options": {
-          "maxSize": 2000000
+          "maxSize": 5242880
         }
       }
     ],
     "indexes": [
       "CREATE UNIQUE INDEX `idx_FGRD8lF` ON `price` (`price_id`)"
     ],
-    "listRule": null,
-    "viewRule": null,
+    "listRule": "",
+    "viewRule": "",
     "createRule": null,
     "updateRule": null,
     "deleteRule": null,
@@ -243,7 +245,7 @@
         "presentable": false,
         "unique": false,
         "options": {
-          "maxSize": 2000000
+          "maxSize": 5242880
         }
       },
       {
@@ -258,6 +260,198 @@
           "min": null,
           "max": null,
           "noDecimal": false
+        }
+      }
+    ],
+    "indexes": [],
+    "listRule": "",
+    "viewRule": "",
+    "createRule": null,
+    "updateRule": null,
+    "deleteRule": null,
+    "options": {}
+  },
+  {
+    "id": "yzeykc415r0okq1",
+    "name": "organisation",
+    "type": "base",
+    "system": false,
+    "schema": [
+      {
+        "system": false,
+        "id": "ewiszhvg",
+        "name": "name",
+        "type": "text",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": null,
+          "pattern": ""
+        }
+      }
+    ],
+    "indexes": [],
+    "listRule": "@request.auth.role = \"Admin\"",
+    "viewRule": "",
+    "createRule": "",
+    "updateRule": null,
+    "deleteRule": null,
+    "options": {}
+  },
+  {
+    "id": "_pb_users_auth_",
+    "name": "user",
+    "type": "auth",
+    "system": false,
+    "schema": [
+      {
+        "system": false,
+        "id": "users_avatar",
+        "name": "avatar",
+        "type": "file",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "maxSelect": 1,
+          "maxSize": 5242880,
+          "mimeTypes": [
+            "image/jpeg",
+            "image/png",
+            "image/svg+xml",
+            "image/gif",
+            "image/webp"
+          ],
+          "thumbs": null,
+          "protected": false
+        }
+      },
+      {
+        "system": false,
+        "id": "6f32kmui",
+        "name": "lastName",
+        "type": "text",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": 1,
+          "max": null,
+          "pattern": ""
+        }
+      },
+      {
+        "system": false,
+        "id": "sdfbgawi",
+        "name": "firstName",
+        "type": "text",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": 1,
+          "max": null,
+          "pattern": ""
+        }
+      },
+      {
+        "system": false,
+        "id": "t0hcveo2",
+        "name": "displayName",
+        "type": "text",
+        "required": true,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": 1,
+          "max": null,
+          "pattern": ""
+        }
+      },
+      {
+        "system": false,
+        "id": "3ovwnu9b",
+        "name": "lastSeen",
+        "type": "date",
+        "required": true,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": "",
+          "max": ""
+        }
+      },
+      {
+        "system": false,
+        "id": "caacfktu",
+        "name": "role",
+        "type": "select",
+        "required": true,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "maxSelect": 1,
+          "values": [
+            "Admin",
+            "Service",
+            "User"
+          ]
+        }
+      }
+    ],
+    "indexes": [
+      "CREATE INDEX `__pb_users_auth__created_idx` ON `user` (`created`)"
+    ],
+    "listRule": null,
+    "viewRule": null,
+    "createRule": "",
+    "updateRule": null,
+    "deleteRule": null,
+    "options": {
+      "allowEmailAuth": true,
+      "allowOAuth2Auth": true,
+      "allowUsernameAuth": true,
+      "exceptEmailDomains": null,
+      "manageRule": null,
+      "minPasswordLength": 8,
+      "onlyEmailDomains": null,
+      "requireEmail": false
+    }
+  },
+  {
+    "id": "wv7nurco7nns582",
+    "name": "customer",
+    "type": "base",
+    "system": false,
+    "schema": [
+      {
+        "system": false,
+        "id": "xe6dntpk",
+        "name": "stripe_customer_id",
+        "type": "text",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": null,
+          "pattern": ""
+        }
+      },
+      {
+        "system": false,
+        "id": "w6kglyvo",
+        "name": "user_id",
+        "type": "text",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": null,
+          "pattern": ""
         }
       }
     ],
@@ -340,7 +534,7 @@
         "presentable": false,
         "unique": false,
         "options": {
-          "maxSize": 2000000
+          "maxSize": 5242880
         }
       },
       {
@@ -460,132 +654,11 @@
       }
     ],
     "indexes": [],
-    "listRule": null,
+    "listRule": "",
     "viewRule": null,
     "createRule": null,
     "updateRule": null,
     "deleteRule": null,
     "options": {}
-  },
-  {
-    "id": "_pb_users_auth_",
-    "name": "user",
-    "type": "auth",
-    "system": false,
-    "schema": [
-      {
-        "system": false,
-        "id": "users_avatar",
-        "name": "avatar",
-        "type": "file",
-        "required": false,
-        "presentable": false,
-        "unique": false,
-        "options": {
-          "mimeTypes": [
-              "image/jpeg",
-              "image/png",
-              "image/svg+xml",
-              "image/gif",
-              "image/webp"
-          ],
-          "thumbs": null,
-          "maxSelect": 1,
-          "maxSize": 5242880,
-          "protected": false
-      }
-      },
-      {
-        "system": false,
-        "id": "6f32kmui",
-        "name": "lastName",
-        "type": "text",
-        "required": false,
-        "presentable": false,
-        "unique": false,
-        "options": {
-          "min": 1,
-          "max": null,
-          "pattern": ""
-        }
-      },
-      {
-        "system": false,
-        "id": "sdfbgawi",
-        "name": "firstName",
-        "type": "text",
-        "required": false,
-        "presentable": false,
-        "unique": false,
-        "options": {
-          "min": 1,
-          "max": null,
-          "pattern": ""
-        }
-      },
-      {
-        "system": false,
-        "id": "t0hcveo2",
-        "name": "displayName",
-        "type": "text",
-        "required": true,
-        "presentable": false,
-        "unique": false,
-        "options": {
-          "min": 1,
-          "max": null,
-          "pattern": ""
-        }
-      },
-      {
-        "system": false,
-        "id": "3ovwnu9b",
-        "name": "lastSeen",
-        "type": "date",
-        "required": true,
-        "presentable": false,
-        "unique": false,
-        "options": {
-          "min": "",
-          "max": ""
-        }
-      },
-      {
-        "system": false,
-        "id": "caacfktu",
-        "name": "role",
-        "type": "select",
-        "required": true,
-        "presentable": false,
-        "unique": false,
-        "options": {
-          "maxSelect": 1,
-          "values": [
-            "Admin",
-            "Service",
-            "User"
-          ]
-        }
-      }
-    ],
-    "indexes": [
-      "CREATE INDEX `__pb_users_auth__created_idx` ON `user` (`created`)"
-    ],
-    "listRule": null,
-    "viewRule": null,
-    "createRule": null,
-    "updateRule": null,
-    "deleteRule": null,
-    "options": {
-      "allowEmailAuth": true,
-      "allowOAuth2Auth": true,
-      "allowUsernameAuth": true,
-      "exceptEmailDomains": null,
-      "manageRule": null,
-      "minPasswordLength": 8,
-      "onlyEmailDomains": null,
-      "onlyVerified": false,
-      "requireEmail": false
-  }
   }
 ]

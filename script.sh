@@ -1,7 +1,9 @@
 #!/bin/bash
 
 echo "STRIPE_SECRET_KEY = $STRIPE_SECRET_KEY"
-echo "STRIPE_RETURN_URL = $STRIPE_RETURN_URL"
+echo "STRIPE_CANCEL_URL = $STRIPE_CANCEL_URL"
+echo "STRIPE_SUCCESS_URL = $STRIPE_SUCCESS_URL"
+echo "STRIPE_WHSEC = $STRIPE_WHSEC"
 echo "HOST = $HOST"
 echo "PORT = $PORT"
 echo "DEVELOPMENT = $DEVELOPMENT"
@@ -9,17 +11,17 @@ echo "DEVELOPMENT = $DEVELOPMENT"
 # Serve Offline
 if [[ -n "$DEVELOPMENT" ]]; then
     echo "Serving Offline..."
-    stripe listen --print-secret --api-key "$STRIPE_SECRET_KEY" > secret.txt &
-    wait $!
-    nohup stripe listen --forward-to "http://0.0.0.0:8090/stripe" --api-key "$STRIPE_SECRET_KEY" --live > stripe.out 2>&1 &
+    # stripe listen --print-secret --api-key "$STRIPE_SECRET_KEY" > secret.txt &
+    # wait $!
+    # nohup stripe listen --forward-to "http://0.0.0.0:8090/stripe" --api-key "$STRIPE_SECRET_KEY" --live > stripe.out 2>&1 &
     nohup ./bin/app-amd64-linux serve --http "0.0.0.0:8090"
 # Serve Online
 elif [[ -n "$HOST" && -n "$STRIPE_SECRET_KEY" ]]; then
     echo "Serving Online..."
-    nohup stripe listen --print-secret --api-key "$STRIPE_SECRET_KEY" > secret.txt &
-    wait $!
-    echo "WHSEC = $(<secret.txt)"
-    nohup stripe listen --forward-to "https://$HOST/stripe" --api-key "$STRIPE_SECRET_KEY" --live > stripe.out 2>&1 &
+    # nohup stripe listen --print-secret --api-key "$STRIPE_SECRET_KEY" > secret.txt &
+    # wait $!
+    # echo "WHSEC = $(<secret.txt)"
+    # nohup stripe listen --forward-to "https://$HOST/stripe" --api-key "$STRIPE_SECRET_KEY" --live > stripe.out 2>&1 &
     nohup ./bin/app-amd64-linux serve --http "0.0.0.0:8090"
 # Error
 else

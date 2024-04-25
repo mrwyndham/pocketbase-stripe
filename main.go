@@ -7,7 +7,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strings"
 	"time"
 
 	"github.com/labstack/echo/v5"
@@ -16,6 +15,7 @@ import (
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/forms"
 	"github.com/pocketbase/pocketbase/models"
+	"github.com/pocketbase/pocketbase/plugins/jsvm"
 
 	"github.com/stripe/stripe-go/v76"
 	"github.com/stripe/stripe-go/v76/billingportal/session"
@@ -41,21 +41,39 @@ func int64ToISODate(timestamp int64) string {
 
 func main() {
 	// Retreive stripe generated webhook secret
-	SECRET_TXT, err := os.ReadFile("secret.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	WHSEC := strings.ReplaceAll(string(SECRET_TXT), "\n", "")
-	log.Print(WHSEC)
+	// SECRET_TXT, err := os.ReadFile("secret.txt")
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// WHSEC := strings.ReplaceAll(string(SECRET_TXT), "\n", "")
+	// log.Print(WHSEC)
 	app := pocketbase.New()
+
 	// Retreive your STRIPE_SECRET_KEY from environment variables
 	stripe.Key = os.Getenv("STRIPE_SECRET_KEY")
+	stripeSuccessURL := os.Getenv("STRIPE_SUCCESS_URL")
+	stripeCancelURL := os.Getenv("STRIPE_CANCEL_URL")
+	stripeBillingReturnURL := os.Getenv("STRIPE_BILLING_RETURN_URL")
+	WHSEC := os.Getenv("STRIPE_WHSEC")
+	app.OnBeforeServe().Add(func(e *core.ServeEvent) error {
+		e.Router.GET("/goext/:name", func(c echo.Context) error {
+			name := c.PathParam("name")
+
+			return c.JSON(http.StatusOK, map[string]string{"message": "Hello " + name})
+		} /* optional middlewares */)
+
+		return nil
+	})
+	jsvm.MustRegister(app, jsvm.Config{
+		HooksWatch:    true,
+		HooksPoolSize: 25,
+	})
 	app.OnBeforeServe().Add(func(e *core.ServeEvent) error {
 		e.Router.POST("/create-checkout-session", func(c echo.Context) error {
 			// 1. Destructure the price and quantity from the POST body
 			body := c.Request().Body
 			defer body.Close()
-			payload, err := io.ReadAll(body)
+			payload, _ := io.ReadAll(body)
 			var data map[string]interface{}
 			json.Unmarshal([]byte(payload), &data)
 
@@ -74,7 +92,9 @@ func main() {
 			existingCustomerRecord, err := app.Dao().FindFirstRecordByData("customer", "user_id", record.Id)
 			if err != nil {
 				//create new customer if none exists
+				customerEmail := record.GetString("email")
 				customerParams := &stripe.CustomerParams{
+					Email: &customerEmail,
 					Metadata: map[string]string{
 						"pocketbaseUUID": record.GetString("id"),
 					},
@@ -126,8 +146,8 @@ func main() {
 						CustomerUpdate:           customerUpdateParams,
 						Mode:                     stripe.String("subscription"),
 						AllowPromotionCodes:      stripe.Bool(true),
-						SuccessURL:               stripe.String("https://www.sign365.com.au/account"),
-						CancelURL:                stripe.String("https://www.sign365.com.au/"),
+						SuccessURL:               &stripeSuccessURL,
+						CancelURL:                &stripeCancelURL,
 						LineItems:                lineParams,
 						SubscriptionData:         subscriptionParams,
 					}
@@ -152,8 +172,8 @@ func main() {
 						CustomerUpdate:           customerUpdateParams,
 						Mode:                     stripe.String("payment"),
 						AllowPromotionCodes:      stripe.Bool(true),
-						SuccessURL:               stripe.String("https://www.sign365.com.au/account"),
-						CancelURL:                stripe.String("https://www.sign365.com.au/"),
+						SuccessURL:               &stripeSuccessURL,
+						CancelURL:                &stripeCancelURL,
 						LineItems:                lineParams,
 					}
 					sesh, _ := checkoutSession.New(sessionParams)
@@ -185,8 +205,8 @@ func main() {
 						CustomerUpdate:           customerUpdateParams,
 						Mode:                     stripe.String("subscription"),
 						AllowPromotionCodes:      stripe.Bool(true),
-						SuccessURL:               stripe.String("https://www.sign365.com.au/account"),
-						CancelURL:                stripe.String("https://www.sign365.com.au/"),
+						SuccessURL:               &stripeSuccessURL,
+						CancelURL:                &stripeCancelURL,
 						LineItems:                lineParams,
 						SubscriptionData:         subscriptionParams,
 					}
@@ -211,8 +231,8 @@ func main() {
 						CustomerUpdate:           customerUpdateParams,
 						Mode:                     stripe.String("payment"),
 						AllowPromotionCodes:      stripe.Bool(true),
-						SuccessURL:               stripe.String("https://www.sign365.com.au/account"),
-						CancelURL:                stripe.String("https://www.sign365.com.au/"),
+						SuccessURL:               &stripeSuccessURL,
+						CancelURL:                &stripeCancelURL,
 						LineItems:                lineParams,
 					}
 					sesh, _ := checkoutSession.New(sessionParams)
@@ -269,7 +289,7 @@ func main() {
 				//create new session
 				sessionParams := &stripe.BillingPortalSessionParams{
 					Customer:  stripe.String(stripeCustomer.ID),
-					ReturnURL: stripe.String("https://sign365.com.au/account"),
+					ReturnURL: &stripeBillingReturnURL,
 				}
 				sesh, err := session.New(sessionParams)
 				if err != nil {
@@ -282,7 +302,7 @@ func main() {
 				//create new session
 				sessionParams := &stripe.BillingPortalSessionParams{
 					Customer:  stripe.String(existingCustomerRecord.GetString("stripe_customer_id")),
-					ReturnURL: stripe.String("https://sign365.com.au/account"),
+					ReturnURL: &stripeBillingReturnURL,
 				}
 				sesh, err := session.New(sessionParams)
 				if err != nil {
@@ -294,7 +314,6 @@ func main() {
 		})
 		return nil
 	})
-
 	app.OnBeforeServe().Add(func(e *core.ServeEvent) error {
 		e.Router.POST("/stripe", func(c echo.Context) error {
 			// Read the request body into a byte slice
@@ -313,8 +332,8 @@ func main() {
 			signatureHeader := c.Request().Header.Get("Stripe-Signature")
 			event, err = webhook.ConstructEvent(payload, signatureHeader, WHSEC)
 			if err != nil {
-				failureMessage := fmt.Sprintf("webhook verification failed: payload=%q, signatureHeader=%q, WHSEC=%q, err=%q",
-					payload, signatureHeader, WHSEC, err)
+				failureMessage := fmt.Sprintf("webhook verification failed: payload=%q, signatureHeader=%q, err=%q",
+					payload, signatureHeader, err)
 				return c.JSON(http.StatusBadRequest, map[string]string{"failure": failureMessage})
 			}
 
@@ -391,23 +410,28 @@ func main() {
 					form = forms.NewRecordUpsert(app, record)
 				}
 
-				form.LoadData(map[string]any{
-					"price_id":          price.ID,
-					"product_id":        price.Product.ID,
-					"active":            price.Active,
-					"currency":          price.Currency,
-					"description":       price.Nickname,
-					"type":              price.Type,
-					"unit_amount":       price.UnitAmount,
-					"interval":          price.Recurring.Interval,
-					"interval_count":    price.Recurring.IntervalCount,
-					"trial_period_days": price.Recurring.TrialPeriodDays,
-					"metadata":          price.Metadata,
-				})
+				data := map[string]any{
+					"price_id":    price.ID,
+					"product_id":  price.Product.ID,
+					"active":      price.Active,
+					"currency":    price.Currency,
+					"description": price.Nickname,
+					"type":        price.Type,
+					"unit_amount": price.UnitAmount,
+					"metadata":    price.Metadata,
+				}
+				// Check if Recurring is not nil before accessing its fields
+				if price.Recurring != nil {
+					data["interval"] = price.Recurring.Interval
+					data["interval_count"] = price.Recurring.IntervalCount
+					data["trial_period_days"] = price.Recurring.TrialPeriodDays
+				}
+
+				form.LoadData(data)
 
 				// validate and submit (internally it calls app.Dao().SaveRecord(record) in a transaction)
 				if err := form.Submit(); err != nil {
-					return err
+					return c.JSON(http.StatusBadRequest, map[string]string{"failure": "failed to submit to pocketbase"})
 				}
 			case "customer.subscription.created", "customer.subscription.updated", "customer.subscription.deleted":
 				var subscription stripe.Subscription
@@ -539,7 +563,7 @@ func main() {
 					}
 
 					//Update User Details
-					existingUserRecord, err := app.Dao().FindFirstRecordByData("user", "id", uuid)
+					existingUserRecord, _ := app.Dao().FindFirstRecordByData("user", "id", uuid)
 					var userForm = forms.NewRecordUpsert(app, existingUserRecord)
 
 					userForm.LoadData(map[string]any{
