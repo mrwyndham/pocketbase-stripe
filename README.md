@@ -165,6 +165,9 @@ I really hope this helps in building a fresh image.
 - [Samuel Wyndham](https://twitter.com/meinbiz)
 - [Suan Choi](https://github.com/suanTech)
 
+## Issues
+This repo is downstream from FastPocket. If you are experiencing issues I recommend that you update the packages in `main.go` and then compile the binary. This fixes most of the issues I have had with stripe
+
 ## License
 
 MIT License
