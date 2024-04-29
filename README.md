@@ -2,7 +2,7 @@
 
 The all-in-one starter kit for high-performance SaaS applications. That don't want a vendor buy in when it comes to backend and frontend. This is a front end agnostic template that you can use 100% with any SaaS application. If there are any issues please feel free to reach out to me on X - [@meinbiz](https://twitter.com/meinbiz)
 
-Also if you want to build a next.js front end for your next app. Consider fastpocket.dev it is the fastest way to build a fully fledged PocketBase app.
+Also if you want to build a next.js front end for your next app. Consider [fastpocket.dev](https://fastpocket.dev) it is the fastest way to build a fully fledged PocketBase app.
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/izeSvS?referralCode=9ynQqF)
 
