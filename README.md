@@ -164,7 +164,7 @@ I really hope this helps in building a fresh image.
 
 ## Sponsors
 
-- [XAM Consulting](https://xam.com.au/)
+- [Biz365](https://www.biz365.com.au/)
 
 ## Contributors
 
